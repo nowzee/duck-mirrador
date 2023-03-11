@@ -1,0 +1,270 @@
+body{
+	margin:0px;
+	padding: 0px;
+	background-color:#1b203d;
+	overflow: hidden;
+	font-family: system-ui;
+}
+.clearfix{
+	clear: both;
+}
+.logo{
+	margin: 0px;
+	margin-left: 28px;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 30px;
+}
+.logo span{
+	color: #f7403b;
+}
+.sidenav {
+  height: 100%;
+  width: 300px;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #272c4a;
+  overflow: hidden;
+  transition: 0.5s;
+  padding-top: 30px;
+}
+.sidenav a {
+  padding: 15px 8px 15px 32px;
+  text-decoration: none;
+  font-size: 20px;
+  color: #818181;
+  display: block;
+  transition: 0.3s;
+}
+.sidenav a:hover {
+  color: #f1f1f1;
+  background-color:#1b203d;
+}
+.sidenav{
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+}
+#main {
+  transition: margin-left .5s;
+  padding: 16px;
+  margin-left: 300px;
+}
+.head{
+	padding:20px;
+}
+.col-div-6{
+	width: 50%;
+	float: left;
+}
+.profile{
+	display: inline-block;
+	float: right;
+	width: 160px;
+}
+.pro-img{
+    position: relative;
+    border-radius: 5px;
+	width: 75px;
+	left: 17px;
+}
+.info{
+position: relative;
+color: white;
+top: -99px;
+left: 120px;
+
+}
+
+.profile p{
+	color: white;
+	font-weight: 500;
+	margin-left: 55px;
+	margin-top: 10px;
+	font-size: 13.5px;
+}
+.profile p span{
+	font-weight: 400;
+    font-size: 12px;
+    display: block;
+    color: #8e8b8b;
+}
+.col-div-3{
+	width: 25%;
+	float: left;
+}
+.box{
+	width: 85%;
+	height: 100px;
+	background-color: #272c4a;
+	margin-left: 10px;
+	padding:10px;
+}
+.box p{
+	 font-size: 35px;
+    color: white;
+    font-weight: bold;
+    line-height: 30px;
+    padding-left: 10px;
+    margin-top: 20px;
+    display: inline-block;
+}
+.box p span{
+	font-size: 20px;
+	font-weight: 400;
+	color: #818181;
+}
+.box-icon{
+	font-size: 40px!important;
+    float: right;
+    margin-top: 35px!important;
+    color: #818181;
+    padding-right: 10px;
+}
+.col-div-8{
+	width: 70%;
+	float: left;
+}
+.col-div-4{
+	width: 30%;
+	float: left;
+}
+.content-box{
+	padding: 20px;
+}
+.content-box p{
+	margin: 0px;
+    font-size: 20px;
+    color: #f7403b;
+}
+.content-box p span{
+	float: right;
+    background-color: #ddd;
+    padding: 3px 10px;
+    font-size: 15px;
+}
+.box-4{
+    border-radius: 10px;
+	width: 110%;
+	background-color: #272c4a;
+	height: 350px;
+	
+}
+.box-5{
+    position: absolute;
+    border-radius: 10px;
+	width: 315px;
+	background-color: #272c4a;
+	height: 350px;
+	left: 550px;
+}
+.col-div-5{
+    position: absolute;
+    top: 95px;
+	width: 30%;
+	float: left;
+}
+.col-div-6{
+    top: 95px;
+	width: 30%;
+	float: left;
+}
+.box-6{
+    position: absolute;
+    border-radius: 10px;
+	width: 315px;
+	background-color: #272c4a;
+	height: 664px;
+	left: 1207px;
+}
+.nav2{
+	display: none;
+}
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+  
+}
+td, th {
+  text-align: left;
+  padding:15px;
+  color: #ddd;
+  border-bottom: 1px solid #81818140;
+}
+.disconnect{
+    color: white;
+    font-size: 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #DA373C;
+    position: relative;
+    height: 40px;
+    width: 130px;
+    top: -5px;
+    left: 5px;
+}
+.xp-card{
+position: absolute;
+top: 470px;
+left: 317px;
+border-radius: 10px;
+}
+.xp_fond{
+    position: relative;
+    left: 32px;
+    display: flex;
+    width: 15.5em;
+    height: 3em;
+    line-height: 3;
+    top: 15px;
+    background: #C9C9C9;
+    overflow: hidden;
+    border-radius: 3.5px;
+}
+.xp_fond::after {
+    content: '\25BC';
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 0 1em;box-4
+    background: #272c4a;
+    cursor: pointer;
+    pointer-events: none;
+    transition: .25s all ease;
+}
+.xp_fond:hover::after {
+    color: #272c4a;
+}
+select{
+    appearance: none;
+    outline: 0;
+    box-shadow: none;
+    border: 0!important;
+    background: #1b203d;
+    background-image: none;
+    font-size: 1em;
+    flex: 1;
+    padding: 0 .5em;
+    color: white;
+    cursor: pointer;
+}
+select::-ms-expand {
+    display: none;
+}
+.save_xpcard{
+    color: white;
+    font-size: 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #DA373C;
+    position: absolute;
+    height: 40px;
+    width: 305px;
+    top: 305px;
+    left: 5px;
+}
+

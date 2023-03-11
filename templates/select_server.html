@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Duck-mirrador</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/serveur_select.css') }}" type="text/css"/>
+</head>
+<body>
+	<div class="col-div-8">
+		<div class="box-8">
+		<div class="content-box">
+			<p>Discord serveur</p>
+			<br/>
+			<table>
+  <tr>
+    <th>Name</th>
+    <th>ID</th>
+    <th>Manage</th>
+  </tr>
+  {% for payloads in server_list %}
+  <form action="{{ url_for('dashboard') }}" method="post">
+  <tr>
+    <td><img src="{{ payloads['icon'] }}" class="discord-img" />{{ payloads['nom'] }}</td>
+    <td>{{ payloads['id_server'] }}</td>
+    <td>
+        <input type="hidden" name="server_id" value="{{ payloads['id_server'] }}">
+        <input type="hidden" name="server_name" value="{{ payloads['nom'] }}">
+        <input type="hidden" name="server_icon" value="{{ payloads['icon'] }}">
+        <a><button>Manage</button></a>
+    </td>
+  </tr>
+  </form>
+  {% endfor %}
+
+</table>
+		</div>
+	</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,161 @@
+<!Doctype HTML>
+<html>
+<head>
+	<title>Duck-mirrador</title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/moderate.css') }}" type="text/css"/>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+
+<body>
+
+	<div id="mySidenav" class="sidenav">
+	<p class="logo"><span>Duck-</span>mirrador</p>
+  <a href="{{ url_for('dashboard') }}" class="icon-a"><i class="fa fa-dashboard icons"></i> &nbsp;&nbsp;Dashboard</a>
+  <a href="{{ url_for('administration') }}"class="icon-a"><i class="fa fa-users icons"></i> &nbsp;&nbsp;Administration</a>
+  <a href="#"class="icon-a"><i class="fa fa-shield icons"></i> &nbsp;&nbsp;Modération</a>
+  <a href="#"class="icon-a"><i class="fa fa-tasks icons"></i> &nbsp;&nbsp;Serveur</a>
+  <a href="{{ url_for('info_account') }}"class="icon-a"><i class="fa fa-user icons"></i> &nbsp;&nbsp;Accounts</a>
+  <a href="#"class="icon-a"><i class="fa fa-list-alt icons"></i> &nbsp;&nbsp;Events</a>
+
+</div>
+<div id="main">
+
+	<div class="head">
+		<div class="col-div-6">
+<span style="font-size:30px;cursor:pointer; color: white;" class="nav"  >&#9776; Modération</span>
+<span style="font-size:30px;cursor:pointer; color: white;" class="nav2"  >&#9776; Modération</span>
+</div>
+
+	<div class="clearfix"></div>
+</div>
+    <form method="POST" action="{{ url_for('settings_serveur') }}">
+	<div class="col-div-4">
+		<div class="box-4">
+		<div class="content-box">
+			<p>Règle de filtrage</p>
+			<p class="motsinterdis">mots interdis</p>
+			<div class="extension">
+                    <select name="mots_interdis" id="extension">
+                        <option value="delete_warn">Supprimer le message & ajouter un avertissement</option>
+                        <option value="delete">Supprimer le message</option>
+                        <option value="disable">Désactiver</option>
+                    </select>
+			</div>
+			<p class="anti-spam">anti-spam</p>
+			<div class="anti-spams">
+                    <select name="anti-spam" id="anti-spam">
+                        <option value="delete_warn">Supprimer le message & ajouter un avertissement</option>
+                        <option value="delete">Supprimer le message</option>
+                        <option value="disable">Désactiver</option>
+                    </select>
+			</div>
+			<p class="liens">Liens</p>
+			<div class="lien">
+                    <select name="lien" id="lien">
+                        <option value="delete_warn">Supprimer le message & ajouter un avertissement</option>
+                        <option value="delete">Supprimer le message</option>
+                        <option value="disable">Désactiver</option>
+                    </select>
+			</div>
+			<p class="mention">Mentions excessives</p>
+			<div class="mentions">
+                    <select name="mentions" id="mentions">
+                        <option value="delete_warn">Supprimer le message & ajouter un avertissement</option>
+                        <option value="delete">Supprimer le message</option>
+                        <option value="disable">Désactiver</option>
+                    </select>
+			</div>
+			<p class="majuscule">Majuscules excessives</p>
+			<div class="majuscules">
+                    <select name="majuscules" id="majuscules">
+                        <option value="delete_warn">Supprimer le message & ajouter un avertissement</option>
+                        <option value="delete">Supprimer le message</option>
+                        <option value="disable">Désactiver</option>
+                    </select>
+			</div>
+            <p class="emojis">Emojis excessifs</p>
+			<div class="emoji">
+                    <select name="emoji" id="emoji">
+                        <option value="delete_warn">Supprimer le message & ajouter un avertissement</option>
+                        <option value="delete">Supprimer le message</option>
+                        <option value="disable">Désactiver</option>
+                    </select>
+			</div>
+            <p class="zalgo">Textes déformés (Zalgo)</p>
+			<div class="zalgos">
+                    <select name="zalgos" id="zalgos">
+                        <option value="delete_warn">Supprimer le message & ajouter un avertissement</option>
+                        <option value="delete">Supprimer le message</option>
+                        <option value="disable">Désactiver</option>
+                    </select>
+			</div>
+            <input type="submit" value="Save setting" class="disconnect">
+    </div>
+
+		</div>
+	</div>
+    </form>
+    <div class="col-div-8">
+		<div class="box-8">
+		<div class="content-box">
+			<h1><p class="auto">Auto-Modération</p></h1>
+            <p class="auto-mod">Au bout de </p>
+			<div class="auto-mod-averti">
+                    <select name="auto-mod-averti" id="t">
+                        <option value="delete_warn">3</option>
+                        <option value="delete">4</option>
+                        <option value="disable">5</option>
+                        <option value="6">6</option>
+                    </select>
+			</div>
+            <p class="aver">avertissements</p>
+            <div class="raison">
+                    <select name="te" id="s">
+                        <option value="delete_warn">bannir</option>
+                        <option value="delete">expulser</option>
+                    </select>
+			</div>
+            <p class="uti">l'utilisateur</p>
+            <h1><p class="anti">Anti-Raids</p></h1>
+            <p style="position: relative; top: 120px;">Coming soon...</p>
+
+    </div>
+		</div>
+	</div>
+	</div>
+
+	<div class="clearfix"></div>
+</div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+
+  $(".nav").click(function(){
+    $("#mySidenav").css('width','70px');
+    $("#main").css('margin-left','70px');
+    $(".logo").css('visibility', 'hidden');
+    $(".logo span").css('visibility', 'visible');
+     $(".logo span").css('margin-left', '-10px');
+     $(".icon-a").css('visibility', 'hidden');
+     $(".icons").css('visibility', 'visible');
+     $(".icons").css('margin-left', '-8px');
+      $(".nav").css('display','none');
+      $(".nav2").css('display','block');
+  });
+
+$(".nav2").click(function(){
+    $("#mySidenav").css('width','300px');
+    $("#main").css('margin-left','300px');
+    $(".logo").css('visibility', 'visible');
+     $(".icon-a").css('visibility', 'visible');
+     $(".icons").css('visibility', 'visible');
+     $(".nav").css('display','block');
+      $(".nav2").css('display','none');
+ });
+
+</script>
+
+</body>
+</html>
