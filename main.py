@@ -235,7 +235,65 @@ def info_account():
 def moderation():
     if 'username' and 'email' and 'adress_ip' and 'identifiant' and 'avatar' in session:
         if 'idserver' in session:
-            return render_template("moderate/modération.html")
+            id_serveur = session["idserver"]
+
+            with open(f"database/server/{id_serveur}.json", "r") as file:
+                data = json.load(file)
+                mots_interdit = data["mots_interdit"]
+                anti_spam = data["anti_spam"]
+                lien_filtered = data["lien_filtered"]
+                zalgo = data["zalgo"]
+                Mentions_excessif = data["Mentions_excessif"]
+                Majuscule_excessif = data["Majuscule_excessif"]
+
+                if mots_interdit == 'delete':
+                    mots_interdits = "Supprimer le message"
+                elif mots_interdit == 'delete_warn':
+                    mots_interdits = "Supprimer le message & ajouter un avertissement"
+                elif mots_interdit == 'disable':
+                    mots_interdits = "Désactiver"
+
+                if anti_spam == 'delete':
+                    anti_spams = "Supprimer le message"
+                elif anti_spam == 'delete_warn':
+                    anti_spams = "Supprimer le message & ajouter un avertissement"
+                elif anti_spam == 'disable':
+                    anti_spams = "Désactiver"
+
+                if lien_filtered == 'delete':
+                    lien_filtereds = "Supprimer le message"
+                elif lien_filtered == 'delete_warn':
+                    lien_filtereds = "Supprimer le message & ajouter un avertissement"
+                elif lien_filtered == 'disable':
+                    lien_filtereds = "Désactiver"
+
+                if zalgo == 'delete':
+                    zalgos = "Supprimer le message"
+                elif zalgo == 'delete_warn':
+                    zalgos = "Supprimer le message & ajouter un avertissement"
+                elif zalgo == 'disable':
+                    zalgos = "Désactiver"
+
+                if Mentions_excessif == 'delete':
+                    Mentions_excessifs = "Supprimer le message"
+                elif Mentions_excessif == 'delete_warn':
+                    Mentions_excessifs = "Supprimer le message & ajouter un avertissement"
+                elif Mentions_excessif == 'disable':
+                    Mentions_excessifs = "Désactiver"
+
+                if Majuscule_excessif == 'delete':
+                    Majuscule_excessifs = "Supprimer le message"
+                elif Majuscule_excessif == 'delete_warn':
+                    Majuscule_excessifs = "Supprimer le message & ajouter un avertissement"
+                elif Majuscule_excessif == 'disable':
+                    Majuscule_excessifs = "Désactiver"
+
+            return render_template("moderate/modération.html", mots_interdit=mots_interdit,
+                                   mots_interdits=mots_interdits, anti_spam=anti_spam, anti_spams=anti_spams,
+                                   lien_filtered=lien_filtered, lien_filtereds=lien_filtereds,
+                                   Mentions_excessif=Mentions_excessif, Mentions_excessifs=Mentions_excessifs,
+                                   Majuscule_excessif=Majuscule_excessif, Majuscule_excessifs=Majuscule_excessifs,
+                                   zalgo=zalgo, zalgos=zalgos)
         else:
             return redirect(url_for('select_serveur'))
     else:
