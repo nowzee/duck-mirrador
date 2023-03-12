@@ -37,6 +37,7 @@
 			<p class="motsinterdis">mots interdis</p>
 			<div class="extension">
                     <select name="mots_interdis" id="extension">
+                        <option value="{{ mots_interdit }}" selected>{{ mots_interdits }}</option>
                         <option value="delete_warn">Supprimer le message & ajouter un avertissement</option>
                         <option value="delete">Supprimer le message</option>
                         <option value="disable">Désactiver</option>
@@ -45,6 +46,7 @@
 			<p class="anti-spam">anti-spam</p>
 			<div class="anti-spams">
                     <select name="anti-spam" id="anti-spam">
+                        <option value="{{ anti_spam }}" selected>{{ anti_spams }}</option>
                         <option value="delete_warn">Supprimer le message & ajouter un avertissement</option>
                         <option value="delete">Supprimer le message</option>
                         <option value="disable">Désactiver</option>
@@ -53,6 +55,7 @@
 			<p class="liens">Liens</p>
 			<div class="lien">
                     <select name="lien" id="lien">
+                        <option value="{{ lien_filtered }}" selected>{{ lien_filtereds }}</option>
                         <option value="delete_warn">Supprimer le message & ajouter un avertissement</option>
                         <option value="delete">Supprimer le message</option>
                         <option value="disable">Désactiver</option>
@@ -61,6 +64,7 @@
 			<p class="mention">Mentions excessives</p>
 			<div class="mentions">
                     <select name="mentions" id="mentions">
+                        <option value="{{ Mentions_excessif }}" selected>{{ Mentions_excessifs }}</option>
                         <option value="delete_warn">Supprimer le message & ajouter un avertissement</option>
                         <option value="delete">Supprimer le message</option>
                         <option value="disable">Désactiver</option>
@@ -69,6 +73,7 @@
 			<p class="majuscule">Majuscules excessives</p>
 			<div class="majuscules">
                     <select name="majuscules" id="majuscules">
+                        <option value="{{ Majuscule_excessif }}" selected>{{ Majuscule_excessifs }}</option>
                         <option value="delete_warn">Supprimer le message & ajouter un avertissement</option>
                         <option value="delete">Supprimer le message</option>
                         <option value="disable">Désactiver</option>
@@ -77,6 +82,7 @@
             <p class="emojis">Emojis excessifs</p>
 			<div class="emoji">
                     <select name="emoji" id="emoji">
+                        <option value="disable" selected>Invalide</option>
                         <option value="delete_warn">Supprimer le message & ajouter un avertissement</option>
                         <option value="delete">Supprimer le message</option>
                         <option value="disable">Désactiver</option>
@@ -85,6 +91,7 @@
             <p class="zalgo">Textes déformés (Zalgo)</p>
 			<div class="zalgos">
                     <select name="zalgos" id="zalgos">
+                        <option value="{{ zalgo }}" selected >{{ zalgos }}</option>
                         <option value="delete_warn">Supprimer le message & ajouter un avertissement</option>
                         <option value="delete">Supprimer le message</option>
                         <option value="disable">Désactiver</option>
