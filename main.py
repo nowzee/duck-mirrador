@@ -197,6 +197,7 @@ def dashboard():
 
 @app.route("/info_account", methods=["GET"])
 def info_account():
+    global niveau, experience, SEUIL_EXPERIENCE_NIVEAU
     if 'username' and 'email' and 'adress_ip' and 'identifiant' and 'avatar' in session:
         username = session['username']
         id = session['identifiant']
@@ -223,8 +224,29 @@ def info_account():
             elif fond == 'bg7.jpg':
                 fonds = 'planche de bois'
 
+        # Ouvrir la base de données
+        conn = sqlite3.connect('database/xpdata.db')
 
-        buffer = settings_xp_card(bot, id, id_serveur, avatars_image, username)
+        # Créer un curseur
+        cur = conn.cursor()
+
+        # Exécuter une requête SQL pour récupérer les données d'un serveur Discord
+        cur.execute('SELECT * FROM utilisateurs WHERE serveur_id = ? AND id = ?', (id_serveur, id))
+
+        # Récupérer les résultats de la requête
+        resultats = cur.fetchall()
+
+        # Fermer le curseur et la connexion à la base de données
+        cur.close()
+        conn.close()
+
+        # Traiter les résultats
+        for resultat in resultats:
+            experience = resultat[3]
+            niveau = resultat[4]
+            SEUIL_EXPERIENCE_NIVEAU = 100 * niveau
+
+        buffer = settings_xp_card(bot, id, id_serveur, avatars_image, username, niveau, experience, SEUIL_EXPERIENCE_NIVEAU)
         return render_template('account/account.html', username=username, rank=Rank, identifiant=id,
                                avatars_image=avatars_image, serveur=serveur, buffer=buffer, value=fond, fonds=fonds)
     else:
