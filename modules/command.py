@@ -61,7 +61,7 @@ def count_member(id_serveur, bot):
     return member_count
 
 
-def settings_xp_card(bot, id, id_serveur, avatars_image, username):
+def settings_xp_card(bot, id, id_serveur, avatars_image, username, niveau, experience, SEUIL_EXPERIENCE_NIVEAU):
     user_id = id
     guild_id = id_serveur
 
@@ -94,7 +94,8 @@ def settings_xp_card(bot, id, id_serveur, avatars_image, username):
     draw = ImageDraw.Draw(mask)
     draw.rounded_rectangle((0, 0, xp.width, xp.height), radius=20, fill="white")
     xp.putalpha(mask)
-    pink_box_width = 325
+    Pourcentage = (experience / SEUIL_EXPERIENCE_NIVEAU)*650
+    pink_box_width = Pourcentage
     pink_box_height = 40
     draw = ImageDraw.Draw(xp)
     draw.rounded_rectangle((0, 0, pink_box_width, pink_box_height), radius=20, fill=(255, 187, 92), outline=None,
@@ -110,7 +111,7 @@ def settings_xp_card(bot, id, id_serveur, avatars_image, username):
     font = ImageFont.truetype("./modules/sassets/16020_FUTURAM.ttf", size=40)
     font_xp = ImageFont.truetype("./modules/sassets/16020_FUTURAM.ttf", size=30)
     draw.text((280, 170), username, font=font, fill=(255, 187, 92))
-    draw.text((580, 15), "Level : 15 : 50 / 100", font=font_xp, fill=(255, 187, 92))
+    draw.text((580, 15), f"Level : {niveau} : {experience}/{SEUIL_EXPERIENCE_NIVEAU}xp", font=font_xp, fill=(255, 187, 92))
 
     # Coller la carte de xp sur l'image de fond
     background.alpha_composite(profiles_rezise, (15, 35))
@@ -124,7 +125,7 @@ def settings_xp_card(bot, id, id_serveur, avatars_image, username):
     return data_uri
 
 
-def xp_card(id, avatars_image, username):
+def xp_card(id, avatars_image, username, niveau, experience, SEUIL_EXPERIENCE_NIVEAU):
 
     user_id = id
 
@@ -153,7 +154,8 @@ def xp_card(id, avatars_image, username):
     draw = ImageDraw.Draw(mask)
     draw.rounded_rectangle((0, 0, xp.width, xp.height), radius=20, fill="white")
     xp.putalpha(mask)
-    pink_box_width = 325
+    Pourcentage = (experience / SEUIL_EXPERIENCE_NIVEAU) * 650
+    pink_box_width = Pourcentage
     pink_box_height = 40
     draw = ImageDraw.Draw(xp)
     draw.rounded_rectangle((0, 0, pink_box_width, pink_box_height), radius=20, fill=(255, 187, 92), outline=None,
@@ -169,7 +171,7 @@ def xp_card(id, avatars_image, username):
     font = ImageFont.truetype("./modules/sassets/16020_FUTURAM.ttf", size=40)
     font_xp = ImageFont.truetype("./modules/sassets/16020_FUTURAM.ttf", size=30)
     draw.text((365, 170), username, font=font, fill=(255, 187, 92))
-    draw.text((580, 15), "Level : 15 : 50 / 100", font=font_xp, fill=(255, 187, 92))
+    draw.text((580, 15), f"Level : {niveau} : {experience}/{SEUIL_EXPERIENCE_NIVEAU}xp", font=font_xp, fill=(255, 187, 92))
 
     # Coller la carte de xp sur l'image de fond
     background.alpha_composite(profiles_rezise, (15, 35))
