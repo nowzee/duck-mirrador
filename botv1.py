@@ -1,9 +1,9 @@
 import os
 from colorama import Fore, Style
 from modules.command import *
-from io import BytesIO
 from modules.moderate import *
 import time
+import sqlite3
 
 
 def discord_bot(bot):
@@ -14,7 +14,7 @@ def discord_bot(bot):
         print(TIME + " Logged in as " + Fore.YELLOW + bot.user.name)
         print(TIME + " BOT ID " + Fore.YELLOW + str(bot.user.id))
         print(TIME + " Discord Version " + Fore.YELLOW + discord.__version__)
-        statut_name = discord.Activity(type=discord.ActivityType.playing, name="Le canard est en ligne !duck_help")
+        statut_name = discord.Activity(type=discord.ActivityType.playing, name="!duck for more help")
         statut_online = discord.Status.online
         await bot.change_presence(status=statut_online, activity=statut_name)
         synced = await bot.tree.sync()
@@ -54,6 +54,58 @@ def discord_bot(bot):
         invite_regex = r"(?:https?://)?discord(?:.gg|(?:app)?.com/invite)/([a-zA-Z0-9-]+)"
 
         if not message.content.startswith(bot.command_prefix):
+            # Connexion à la base de données
+            conn = sqlite3.connect('database/xpdata.db')
+            cursor = conn.cursor()
+
+            cursor.execute('CREATE TABLE IF NOT EXISTS utilisateurs ('
+                           'id INTEGER,'
+                           'nom TEXT,'
+                           'serveur_id INTEGER,'
+                           'experience INTEGER,'
+                           'niveau INTEGER,'
+                           'PRIMARY KEY (id, serveur_id)'
+                           ')')
+
+
+            # Récupération de l'ID du serveur et de l'utilisateur
+            serveur_id = message.guild.id
+            utilisateur_id = message.author.id
+
+            # Vérification si l'utilisateur existe dans la base de données pour ce serveur
+            cursor.execute('SELECT id, experience, niveau FROM utilisateurs WHERE id = ? AND serveur_id = ?',
+                           (utilisateur_id, serveur_id))
+            result = cursor.fetchone()
+
+            # Si l'utilisateur n'existe pas, on l'ajoute à la table des utilisateurs
+            if result is None:
+                cursor.execute(
+                    'INSERT INTO utilisateurs (id, nom, serveur_id, experience, niveau) VALUES (?, ?, ?, ?, ?)',
+                    (utilisateur_id, message.author.name, serveur_id, 0, 1))
+
+            # Sinon, on récupère son expérience et son niveau actuel
+            else:
+                utilisateur_experience = result[1]
+                utilisateur_niveau = result[2]
+
+                # Ajout de l'expérience à l'utilisateur
+                utilisateur_experience += 1
+                cursor.execute('UPDATE utilisateurs SET experience = ? WHERE id = ? AND serveur_id = ?',
+                               (utilisateur_experience, utilisateur_id, serveur_id))
+                # Constantes
+                SEUIL_EXPERIENCE_NIVEAU = 100 * utilisateur_niveau
+
+                # Passage au niveau supérieur si l'utilisateur atteint le seuil d'expérience
+                if utilisateur_experience >= SEUIL_EXPERIENCE_NIVEAU:
+                    utilisateur_niveau += 1
+                    cursor.execute('UPDATE utilisateurs SET niveau = ?, experience = ? WHERE id = ? AND serveur_id = ?',
+                                   (utilisateur_niveau,25, utilisateur_id, serveur_id))
+                    await message.channel.send(f"{message.author.mention} a atteint le niveau {utilisateur_niveau} !")
+
+            # Validation des changements dans la base de données
+            conn.commit()
+            conn.close()
+
             if perm.administrator:
                 pass
             else:
@@ -144,12 +196,39 @@ def discord_bot(bot):
     @bot.command()
     async def rank(ctx):
         try:
+            serveur_id = ctx.guild.id
+            utilisateur_id = ctx.author.id
+
+            # Ouvrir la base de données
+            conn = sqlite3.connect('database/xpdata.db')
+
+            # Créer un curseur
+            cur = conn.cursor()
+
+            # Exécuter une requête SQL pour récupérer les données d'un serveur Discord
+            cur.execute('SELECT * FROM utilisateurs WHERE serveur_id = ? AND id = ?', (serveur_id, utilisateur_id))
+
+            # Récupérer les résultats de la requête
+            resultats = cur.fetchall()
+
+            # Fermer le curseur et la connexion à la base de données
+            cur.close()
+            conn.close()
+
+            # Traiter les résultats
+            for resultat in resultats:
+                experience = resultat[3]
+                niveau = resultat[4]
+                SEUIL_EXPERIENCE_NIVEAU = 100 * niveau
+
             username = ctx.author.name
             id = ctx.author.id
             avatars_image = ctx.author.avatar
+
             channels = 1079998728955506789
             channel = bot.get_channel(int(channels))
-            buffer = xp_card(id, avatars_image, username)
+
+            buffer = xp_card(id, avatars_image, username,niveau, experience, SEUIL_EXPERIENCE_NIVEAU)
             asyncio.run_coroutine_threadsafe(ctx.send(file=discord.File(buffer, filename="image.png")), bot.loop)
         except FileNotFoundError:
             await ctx.send(
@@ -186,6 +265,7 @@ def discord_bot(bot):
         except Exception:
             await ctx.send("User not found.")
 
+
     @bot.command()
     async def duck(ctx):
         perm = ctx.author.guild_permissions
@@ -199,11 +279,6 @@ def discord_bot(bot):
             help.add_field(name="rank",
                                     value=f"!rank",
                                     inline=True)
-            help.add_field(name="\nMusique",
-                           value="!play\n"
-                                 "!disconnect\n"
-                                 "Compatible avec deezer",
-                           inline=True)
             help.add_field(name="Compte détail",
                            value="!info + id pour le serveur"
                                  "\n!info-account + id",inline=True)
