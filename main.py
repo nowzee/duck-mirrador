@@ -16,6 +16,13 @@ bot = commands.Bot(command_prefix='!', intents=intents)
 @app.errorhandler(404)
 def page_not_found(error):
     return redirect(url_for('dashboard'))
+@app.after_request
+def add_header(response):
+    response.headers['X-Frame-Options'] = 'DENY'
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+    response.headers['X-XSS-Protection'] = '1; mode=block'
+    return response
+
 @app.errorhandler(500)
 def page_not_found(error):
     return redirect(url_for('connexion'))
