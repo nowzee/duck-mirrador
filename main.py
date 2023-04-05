@@ -453,7 +453,7 @@ def settings_card():
 
 
 def run_discord_bot():
-    discord_bot(bot)
+    discord_bot(bot, HOSTS, PORTS)
 
 
 def launch_discord_bot():
