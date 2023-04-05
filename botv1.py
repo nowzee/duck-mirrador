@@ -6,15 +6,14 @@ import time
 import sqlite3
 
 
-def discord_bot(bot):
-
+def discord_bot(bot, HOSTS, PORTS):
     @bot.event
     async def on_ready():
         TIME = (Fore.GREEN + time.strftime("%H:%M:%S UTC", time.gmtime()) + Fore.WHITE + Style.BRIGHT)
         print(TIME + " Logged in as " + Fore.YELLOW + bot.user.name)
         print(TIME + " BOT ID " + Fore.YELLOW + str(bot.user.id))
         print(TIME + " Discord Version " + Fore.YELLOW + discord.__version__)
-        statut_name = discord.Activity(type=discord.ActivityType.playing, name="!duck for more help")
+        statut_name = discord.Activity(type=discord.ActivityType.playing, name="!duck for more help\nBeta version")
         statut_online = discord.Status.online
         await bot.change_presence(status=statut_online, activity=statut_name)
         synced = await bot.tree.sync()
@@ -39,10 +38,12 @@ def discord_bot(bot):
                 "Majuscule_excessif": "delete_warn",
                 "emojis_excessif": "delete_warn",
                 "logchannel": "None",
+                "xplogchannel": "None",
                 "eventchannel": "None"
             }
             json.dump(data, file)
             file.close()
+
     @bot.event
     async def on_message(message):
         # filtrage
@@ -66,7 +67,6 @@ def discord_bot(bot):
                            'niveau INTEGER,'
                            'PRIMARY KEY (id, serveur_id)'
                            ')')
-
 
             # Récupération de l'ID du serveur et de l'utilisateur
             serveur_id = message.guild.id
@@ -99,7 +99,7 @@ def discord_bot(bot):
                 if utilisateur_experience >= SEUIL_EXPERIENCE_NIVEAU:
                     utilisateur_niveau += 1
                     cursor.execute('UPDATE utilisateurs SET niveau = ?, experience = ? WHERE id = ? AND serveur_id = ?',
-                                   (utilisateur_niveau,25, utilisateur_id, serveur_id))
+                                   (utilisateur_niveau, 25, utilisateur_id, serveur_id))
                     await message.channel.send(f"{message.author.mention} a atteint le niveau {utilisateur_niveau} !")
 
             # Validation des changements dans la base de données
@@ -146,7 +146,8 @@ def discord_bot(bot):
                         warning(user, message, bot, type)
                     else:
                         await message.delete()
-                        await message.channel.send(f"Attention, {message.author.mention}, votre message contient des mentions excessives")
+                        await message.channel.send(
+                            f"Attention, {message.author.mention}, votre message contient des mentions excessives")
 
                 if detecter_majuscules_excessives(phrase, seuil=15):
                     if config["Majuscule_excessif"] == 'disable':
@@ -195,6 +196,7 @@ def discord_bot(bot):
 
     @bot.command()
     async def rank(ctx):
+        global niveau, experience, SEUIL_EXPERIENCE_NIVEAU, log
         try:
             serveur_id = ctx.guild.id
             utilisateur_id = ctx.author.id
@@ -225,14 +227,43 @@ def discord_bot(bot):
             id = ctx.author.id
             avatars_image = ctx.author.avatar
 
-            channels = 1079998728955506789
-            channel = bot.get_channel(int(channels))
+            with open(f'database/server/{ctx.guild.id}.json') as file:
+                data = json.load(file)
+                xplogchannel = data['xplogchannel']
+                file.close()
+            log = bot.get_channel(int(xplogchannel))
 
-            buffer = xp_card(id, avatars_image, username,niveau, experience, SEUIL_EXPERIENCE_NIVEAU)
-            asyncio.run_coroutine_threadsafe(ctx.send(file=discord.File(buffer, filename="image.png")), bot.loop)
+            buffer = xp_card(id, avatars_image, username, niveau, experience, SEUIL_EXPERIENCE_NIVEAU)
+            asyncio.run_coroutine_threadsafe(log.send(file=discord.File(buffer, filename="image.png")), bot.loop)
         except FileNotFoundError:
             await ctx.send(
                 'Connect to duck-mirrador with the link : http://192.168.1.140:7777/connexion for set your xp card but your xp data is saved')
+        except Exception:
+            try:
+                with open(f'database/server/{ctx.guild.id}.json') as file:
+                    data = json.load(file)
+                    xplogchannel = data['xplogchannel']
+                    file.close()
+                log = bot.get_channel(int(xplogchannel))
+                username = ctx.author.name
+                id = ctx.author.id
+                avatars_image = ctx.author.avatar
+                niveau = 1
+                experience = 0
+                SEUIL_EXPERIENCE_NIVEAU = 100 * niveau
+
+                buffer = xp_card(id, avatars_image, username, niveau, experience, SEUIL_EXPERIENCE_NIVEAU)
+                await log.send(file=discord.File(buffer, filename="image.png"))
+            except Exception:
+                username = ctx.author.name
+                id = ctx.author.id
+                avatars_image = ctx.author.avatar
+                niveau = 1
+                experience = 0
+                SEUIL_EXPERIENCE_NIVEAU = 100 * niveau
+
+                buffer = xp_card(id, avatars_image, username, niveau, experience, SEUIL_EXPERIENCE_NIVEAU)
+                await ctx.send(file=discord.File(buffer, filename="image.png"))
 
     @bot.command(name='info')
     async def user_info(ctx, user_id):
@@ -265,6 +296,9 @@ def discord_bot(bot):
         except Exception:
             await ctx.send("User not found.")
 
+    @bot.command()
+    async def dashboard(ctx):
+        await ctx.author.send(f"http://{HOSTS}:{PORTS}/dashboard")
 
     @bot.command()
     async def duck(ctx):
@@ -277,14 +311,13 @@ def discord_bot(bot):
             help = discord.Embed(color=discord.Colour.dark_gold(), title="Help",
                                  description="Commande utilisateur")
             help.add_field(name="rank",
-                                    value=f"!rank",
-                                    inline=True)
+                           value=f"!rank",
+                           inline=True)
             help.add_field(name="Compte détail",
                            value="!info + id pour le serveur"
-                                 "\n!info-account + id",inline=True)
+                                 "\n!info-account + id", inline=True)
             help.add_field(name="Dasboard",
                            value="!dashboard\n"
                                  "Go to your dashboard", inline=True)
             help.set_thumbnail(url=bot.user.avatar)
             await ctx.send(embed=help)
-
