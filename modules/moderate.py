@@ -58,6 +58,8 @@ def warning(user, message, bot, type):
     bannissement = discord.Embed(color=discord.Colour.red(), title="Bannisssement",
                                  description="Pour demande de deban contacter le support du bot\nPour obtenir plus d'information sur la personne banni !info + ID\n"
                                              "L'utilisateur sera mit en blacklisted pendant 24h sur les serveurs non rejoins")
+    expulsion = discord.Embed(color=discord.Colour.dark_gold(), title="Expulsion",
+                              description="L'utilisateur sera expulsé")
 
     if user in usage_count:
         usage_count[message.author.id] += 1
