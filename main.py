@@ -1,16 +1,24 @@
 from flask import Flask, redirect, url_for, request, render_template, session, Response
 import threading
-import json
+import sqlite3
 from modules.command import *
 from datetime import timedelta
 from botv1 import discord_bot
 from discord.ext import commands
 
 app = Flask(__name__)
-app.secret_key = "yoursecretkey" #enter your secret key
+app.secret_key = "my_secret_key"
+
 app.permanent_session_lifetime = timedelta(days=30)
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix='!', intents=intents)
+
+PORTS = 7777 # Port
+HOSTS = '0.0.0.0' # Host
+redirect_url = "ip or host" # redirect url
+token = 'Token' #token bot
+CLIENT_IDS = "clientid" # client id bot
+CLIENT_SECRETS = "clientsecret" #client secret bot
 
 
 @app.errorhandler(404)
@@ -34,9 +42,9 @@ def discord_authorized():
     global r
     code = request.args.get('code')
     API_ENDPOINT = 'https://discord.com/api'
-    CLIENT_ID = 'id_bot' # enter id of bot
-    CLIENT_SECRET = 'secret_bot' # enter secret bot
-    REDIRECT_URI = 'http://set the ip:7777/discord-authorized'
+    CLIENT_ID = CLIENT_IDS
+    CLIENT_SECRET = CLIENT_SECRETS
+    REDIRECT_URI = f'http://{redirect_url}:7777/discord-authorized'
     discord_api = 'https://discordapp.com/api'
     data = {
         'client_id': CLIENT_ID,
@@ -65,8 +73,12 @@ def discord_authorized():
     }
     user_object = requests.get(url=url, headers=headerss)
     user_object1 = requests.get(url=url2, headers=headerss)
+    user_object2 = requests.get(url=url_connec, headers=headerss)
     user_json = user_object.json()
     user_json1 = user_object1.json()
+    user_json2 = user_object2.json()
+
+    print(user_json2)
 
     server_list = []
     for i in user_json1:
@@ -80,12 +92,14 @@ def discord_authorized():
             server_list.append({'nom': name_server, 'id_server': id_server, 'icon': icon_image, 'url': url})
 
     session["serveur_lis"] = server_list
+    print(user_json)
 
     username = user_json.get("username")
     tag = user_json.get("discriminator")
     ids = user_json.get("id")
     email = user_json.get("email")
     avatar = user_json.get("avatar")
+    mfa_enabled = user_json.get("mfa_enabled")
     avatars_image = f'https://cdn.discordapp.com/avatars/{ids}/{avatar}.png'
     email_verified = user_json.get("verified")
     ip_adress = request.remote_addr
@@ -113,7 +127,8 @@ def discord_authorized():
                 "Ip": f"{ip_adress}",
                 "email": f"{email}",
                 "OS": f"{os}",
-                "Fond_xp": "bg.png"
+                "Fond_xp": "bg.png",
+                "mfa_enabled": f"{mfa_enabled}"
             }
             json.dump(data, file)
         return redirect(url_for('select_serveur'))
@@ -131,7 +146,7 @@ def connexion():
 @app.route("/discordss", methods=["GET"])
 def discordss():
     return redirect(
-        'https://discord.com/api/oauth2/authorize?client_id=1071029329103962214&redirect_uri=http%3A%2F%2F192.168.1.140%3A7777%2Fdiscord-authorized&response_type=code&scope=guilds%20identify%20email%20connections')
+        f'https://discord.com/api/oauth2/authorize?client_id={CLIENT_IDS}&redirect_uri=http%3A%2F%2F{redirect_url}%3A7777%2Fdiscord-authorized&response_type=code&scope=identify%20guilds%20email%20connections')
 
 
 @app.route("/administration", methods=["POST", "GET"])
@@ -165,7 +180,7 @@ def dashboard():
                 member_server = count_member(id_serveur, bot)
             except AttributeError:
                 return redirect(
-                    'enter lien')# lien pour ajouter le bot sur un serveur
+                    f'https://discord.com/api/oauth2/authorize?client_id={CLIENT_IDS}&permissions=8&scope=bot')
 
             server_list = session["serveur_lis"]
             name_server = session["server_name"]
@@ -189,7 +204,7 @@ def dashboard():
                     member_server = count_member(id_serveur, bot)
                 except AttributeError:
                     return redirect(
-                        'lien')# lien pour ajouter le bot sur un serveur
+                        f'https://discord.com/api/oauth2/authorize?client_id={CLIENT_IDS}&permissions=8&scope=bot')
 
                 server_list = session["serveur_lis"]
 
@@ -231,29 +246,43 @@ def info_account():
             elif fond == 'bg7.jpg':
                 fonds = 'planche de bois'
 
-        # Ouvrir la base de données
-        conn = sqlite3.connect('database/xpdata.db')
 
-        # Créer un curseur
-        cur = conn.cursor()
+        try:
+            # Ouvrir la base de données
+            conn = sqlite3.connect('database/xpdata.db')
 
-        # Exécuter une requête SQL pour récupérer les données d'un serveur Discord
-        cur.execute('SELECT * FROM utilisateurs WHERE serveur_id = ? AND id = ?', (id_serveur, id))
+            # Créer un curseur
+            cur = conn.cursor()
 
-        # Récupérer les résultats de la requête
-        resultats = cur.fetchall()
+            # Exécuter une requête SQL pour récupérer les données d'un serveur Discord
+            cur.execute('SELECT * FROM utilisateurs WHERE serveur_id = ? AND id = ?', (id_serveur, id))
 
-        # Fermer le curseur et la connexion à la base de données
-        cur.close()
-        conn.close()
+            # Récupérer les résultats de la requête
+            resultats = cur.fetchall()
 
-        # Traiter les résultats
-        for resultat in resultats:
-            experience = resultat[3]
-            niveau = resultat[4]
+            # Fermer le curseur et la connexion à la base de données
+            cur.close()
+            conn.close()
+
+            # Traiter les résultats
+            for resultat in resultats:
+                experience = resultat[3]
+                niveau = resultat[4]
+                SEUIL_EXPERIENCE_NIVEAU = 100 * niveau
+        except sqlite3.OperationalError:
+            niveau = 1
+            experience = 0
             SEUIL_EXPERIENCE_NIVEAU = 100 * niveau
 
-        buffer = settings_xp_card(bot, id, id_serveur, avatars_image, username, niveau, experience, SEUIL_EXPERIENCE_NIVEAU)
+        try:
+            buffer = settings_xp_card(bot, id, id_serveur, avatars_image, username, niveau, experience,
+                                      SEUIL_EXPERIENCE_NIVEAU)
+        except NameError:
+            niveau = 1
+            experience = 0
+            SEUIL_EXPERIENCE_NIVEAU = 100 * niveau
+            buffer = settings_xp_card(bot, id, id_serveur, avatars_image, username, niveau, experience,
+                                      SEUIL_EXPERIENCE_NIVEAU)
         return render_template('account/account.html', username=username, rank=Rank, identifiant=id,
                                avatars_image=avatars_image, serveur=serveur, buffer=buffer, value=fond, fonds=fonds)
     else:
@@ -262,6 +291,7 @@ def info_account():
 
 @app.route("/modération", methods=["GET"])
 def moderation():
+    global channel_id_name, channel_ids, xp_id_name, xp_ids
     if 'username' and 'email' and 'adress_ip' and 'identifiant' and 'avatar' in session:
         if 'idserver' in session:
             id_serveur = session["idserver"]
@@ -317,12 +347,54 @@ def moderation():
                 elif Majuscule_excessif == 'disable':
                     Majuscule_excessifs = "Désactiver"
 
+            log_id = data["logchannel"]
+            xplogchannel_id = data["xplogchannel"]
+
+            headersss = {
+                "Authorization": "Bot {}".format(
+                    token)
+            }
+            url_guild = f'https://discord.com/api/v9/guilds/{id_serveur}/channels'
+            url_channel = f'https://discord.com/api/v9//channels/{log_id}'
+            xplogchannel_id_channel = f'https://discord.com/api/v9//channels/{xplogchannel_id}'
+
+            response_guild = requests.get(url_guild, headers=headersss)
+            response_url_channel = requests.get(url_channel, headers=headersss)
+            responsexplogchannel_id_channel = requests.get(xplogchannel_id_channel, headers=headersss)
+
+            channels = response_guild.json()
+            channel_id = response_url_channel.json()
+            xp_id = responsexplogchannel_id_channel.json()
+            try:
+                if channel_id["code"] == 50035:
+                    channel_id_name = "Selectionner un salon"
+                    channel_ids = None
+
+            except Exception:
+                channel_id_name = channel_id["name"]
+                channel_ids = log_id
+            try:
+                if xp_id["code"] == 50035:
+                    xp_id_name = "Selectionner un salon"
+                    xp_ids = None
+            except Exception:
+                xp_ids = xplogchannel_id
+                xp_id_name = xp_id["name"]
+
+            channelss = []
+            for y in channels:
+                if y['type'] == 0:
+                    id_channel = y['id']
+                    name_channel = y['name']
+                    channelss.append({'name_channel': name_channel, 'id_channel': id_channel})
+
             return render_template("moderate/modération.html", mots_interdit=mots_interdit,
                                    mots_interdits=mots_interdits, anti_spam=anti_spam, anti_spams=anti_spams,
                                    lien_filtered=lien_filtered, lien_filtereds=lien_filtereds,
                                    Mentions_excessif=Mentions_excessif, Mentions_excessifs=Mentions_excessifs,
                                    Majuscule_excessif=Majuscule_excessif, Majuscule_excessifs=Majuscule_excessifs,
-                                   zalgo=zalgo, zalgos=zalgos)
+                                   zalgo=zalgo, zalgos=zalgos,
+                                   channelss=channelss, channel_id_name=channel_id_name, channel_ids=channel_ids, xp_id_name=xp_id_name, xp_ids=xp_ids)
         else:
             return redirect(url_for('select_serveur'))
     else:
@@ -346,6 +418,8 @@ def settings_serveur():
     Mentions_excessif = request.form.get('mentions')
     Majuscule_excessif = request.form.get('majuscules')
     emojis_excessif = request.form.get('emoji')
+    logchannel = request.form.get('logchannel')
+    xplogchannel = request.form.get('xplogchannel')
     with open(f"database/server/{serveur}.json", "r+") as file:
         data = json.load(file)
         data["mots_interdit"] = mots_interdit
@@ -355,6 +429,8 @@ def settings_serveur():
         data["Mentions_excessif"] = Mentions_excessif
         data["Majuscule_excessif"] = Majuscule_excessif
         data["emojis_excessif"] = emojis_excessif
+        data["logchannel"] = logchannel
+        data["xplogchannel"] = xplogchannel
         file.seek(0)
         json.dump(data, file)
         file.truncate()
@@ -375,11 +451,13 @@ def settings_card():
         file.truncate()
     return redirect(url_for('info_account'))
 
+
 def run_discord_bot():
     discord_bot(bot)
 
+
 def launch_discord_bot():
-    bot.run('') # token bot
+    bot.run(token)
 
 
 discord_thread = threading.Thread(target=launch_discord_bot)
@@ -387,4 +465,4 @@ discord_thread2 = threading.Thread(target=run_discord_bot)
 if __name__ == "__main__":
     discord_thread.start()
     discord_thread2.start()
-    app.run(port=7777, host='0.0.0.0')
+    app.run(port=PORTS, host=HOSTS)
