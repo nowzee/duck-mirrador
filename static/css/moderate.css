@@ -1,7 +1,7 @@
 body{
 	margin:0px;
 	padding: 0px;
-	background-color:#1b203d;
+	background-color:#23272A;
 	overflow: hidden;
 	font-family: system-ui;
 }
@@ -26,7 +26,7 @@ body{
   z-index: 1;
   top: 0;
   left: 0;
-  background-color: #272c4a;
+  background-color: #31363A;
   overflow: hidden;
   transition: 0.5s;
   padding-top: 30px;
@@ -41,7 +41,7 @@ body{
 }
 .sidenav a:hover {
   color: #f1f1f1;
-  background-color:#1b203d;
+  background-color:#31363A;
 }
 .sidenav{
   position: absolute;
@@ -91,7 +91,7 @@ left: 120px;
 	font-weight: 400;
     font-size: 12px;
     display: block;
-    color: #8e8b8b;
+    color: white;
 }
 .col-div-3{
 	width: 25%;
@@ -116,7 +116,7 @@ left: 120px;
 .box p span{
 	font-size: 20px;
 	font-weight: 400;
-	color: #818181;
+	color: white;
 }
 .box-icon{
 	font-size: 40px!important;
@@ -139,7 +139,7 @@ left: 120px;
 .content-box p{
 	margin: 0px;
     font-size: 20px;
-    color: #f7403b;
+    color: white;
 }
 .content-box p span{
 	float: right;
@@ -150,7 +150,7 @@ left: 120px;
 .box-4{
     border-radius: 10px;
 	width: 110%;
-	background-color: #272c4a;
+	background-color: #31363A;
 	height: 380px;
 
 }
@@ -162,7 +162,7 @@ left: 120px;
     position: relative;
     border-radius: 10px;
 	width: 110%;
-	background-color: #272c4a;
+	background-color: #31363A;
 	height: 510px;
 	top: 10px;
 }
@@ -197,7 +197,7 @@ select{
     outline: 0;
     box-shadow: none;
     border: 0!important;
-    background: #1b203d;
+    background: #23272A;
     background-image: none;
     font-size: 1em;
     flex: 1;
@@ -384,7 +384,7 @@ select::-ms-expand {
     top: 0;
     right: 0;
     padding: 0 1em;box-4
-    background: #272c4a;
+    background: #23272A;
     cursor: pointer;
     pointer-events: none;
     transition: .25s all ease;
@@ -398,11 +398,12 @@ select::-ms-expand {
     border: none;
     border-radius: 5px;
     background-color: #DA373C;
-    position: relative;
+    position: absolute;
     height: 40px;
     width: 130px;
-    top: -245px;
-    left: 877px;
+    top: 465px;
+    left: 1085px;
+    cursor: pointer;
 }
 .auto{
    position: absolute;
@@ -440,3 +441,35 @@ select::-ms-expand {
    position: absolute;
    top: 120px;
 }
+.log{
+   position: absolute;
+   top: 280px;
+}
+.logchannel{
+    position: relative;
+    display: flex;
+    width: 25em;
+    height: 3em;
+    line-height: 3;
+    top: 230px;
+    left: -1px;
+    background: #C9C9C9;
+    overflow: hidden;
+    border-radius: 3.5px;
+   }
+.xplog{
+   position: absolute;
+   top: 380px;
+}
+.xplogchannel{
+    position: relative;
+    display: flex;
+    width: 25em;
+    height: 3em;
+    line-height: 3;
+    top: 255px;
+    left: -1px;
+    background: #C9C9C9;
+    overflow: hidden;
+    border-radius: 3.5px;
+   }

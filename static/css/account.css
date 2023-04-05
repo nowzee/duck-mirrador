@@ -1,7 +1,7 @@
 body{
 	margin:0px;
 	padding: 0px;
-	background-color:#1b203d;
+	background-color:#23272A;
 	overflow: hidden;
 	font-family: system-ui;
 }
@@ -25,7 +25,7 @@ body{
   z-index: 1;
   top: 0;
   left: 0;
-  background-color: #272c4a;
+  background-color: #31363A;
   overflow: hidden;
   transition: 0.5s;
   padding-top: 30px;
@@ -40,7 +40,7 @@ body{
 }
 .sidenav a:hover {
   color: #f1f1f1;
-  background-color:#1b203d;
+  background-color:#31363A;
 }
 .sidenav{
   position: absolute;
@@ -99,7 +99,7 @@ left: 120px;
 .box{
 	width: 85%;
 	height: 100px;
-	background-color: #272c4a;
+	background-color: #31363A;
 	margin-left: 10px;
 	padding:10px;
 }
@@ -138,7 +138,7 @@ left: 120px;
 .content-box p{
 	margin: 0px;
     font-size: 20px;
-    color: #f7403b;
+    color: white;
 }
 .content-box p span{
 	float: right;
@@ -149,7 +149,7 @@ left: 120px;
 .box-4{
     border-radius: 10px;
 	width: 110%;
-	background-color: #272c4a;
+	background-color: #31363A;
 	height: 350px;
 	
 }
@@ -157,7 +157,7 @@ left: 120px;
     position: absolute;
     border-radius: 10px;
 	width: 315px;
-	background-color: #272c4a;
+	background-color: #31363A;
 	height: 350px;
 	left: 550px;
 }
@@ -176,7 +176,7 @@ left: 120px;
     position: absolute;
     border-radius: 10px;
 	width: 315px;
-	background-color: #272c4a;
+	background-color: #31363A;
 	height: 664px;
 	left: 1207px;
 }
@@ -206,6 +206,7 @@ td, th {
     width: 130px;
     top: -5px;
     left: 5px;
+    cursor: pointer;
 }
 .xp-card{
 position: absolute;
@@ -244,7 +245,7 @@ select{
     outline: 0;
     box-shadow: none;
     border: 0!important;
-    background: #1b203d;
+    background: #23272A;
     background-image: none;
     font-size: 1em;
     flex: 1;
@@ -266,5 +267,6 @@ select::-ms-expand {
     width: 305px;
     top: 305px;
     left: 5px;
+    cursor: pointer;
 }
 

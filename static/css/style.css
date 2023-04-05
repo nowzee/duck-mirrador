@@ -1,7 +1,7 @@
 body{
 	margin:0px;
 	padding: 0px;
-	background-color:#1b203d;
+	background-color:#23272A;
 	overflow: hidden;
 	font-family: system-ui;
 }
@@ -25,7 +25,7 @@ body{
   z-index: 1;
   top: 0;
   left: 0;
-  background-color: #272c4a;
+  background-color: #31363A;
   overflow: hidden;
   transition: 0.5s;
   padding-top: 30px;
@@ -40,7 +40,7 @@ body{
 }
 .sidenav a:hover {
   color: #f1f1f1;
-  background-color:#1b203d;
+  background-color:#31363A;
 }
 .sidenav{
   position: absolute;
@@ -102,7 +102,7 @@ body{
 .box{
 	width: 85%;
 	height: 100px;
-	background-color: #272c4a;
+	background-color: #31363A;
 	margin-left: 10px;
 	border-radius: 10px;
 	padding:10px;
@@ -156,13 +156,12 @@ body{
 }
 .box-8{
 	width: 95%;
-	background-color: #272c4a;
+	background-color: #31363A;
 	height: 330px;
 	
 }
 .box-4{
 	width: 50%;
-	background-color: #272c4a;
 	height: 330px;
 }
 .nav2{

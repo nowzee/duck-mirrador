@@ -1,52 +1,12 @@
 body{
 	margin:0px;
 	padding: 0px;
-	background-color:#1b203d;
+	background-color:#23272A;
 	overflow: hidden;
 	font-family: system-ui;
 }
 .clearfix{
 	clear: both;
-}
-.logo{
-	margin: 0px;
-	margin-left: 28px;
-    font-weight: bold;
-    color: white;
-    margin-bottom: 30px;
-}
-.logo span{
-	color: #f7403b;
-}
-.sidenav {
-  height: 100%;
-  width: 300px;
-  position: fixed;
-  z-index: 1;
-  top: 0;
-  left: 0;
-  background-color: #272c4a;
-  overflow: hidden;
-  transition: 0.5s;
-  padding-top: 30px;
-}
-.sidenav a {
-  padding: 15px 8px 15px 32px;
-  text-decoration: none;
-  font-size: 20px;
-  color: #818181;
-  display: block;
-  transition: 0.3s;
-}
-.sidenav a:hover {
-  color: #f1f1f1;
-  background-color:#1b203d;
-}
-.sidenav{
-  position: absolute;
-  top: 0;
-  right: 25px;
-  font-size: 36px;
 }
 #main {
   transition: margin-left .5s;
@@ -56,44 +16,12 @@ body{
 .head{
 	padding:20px;
 }
-.col-div-6{
-	width: 50%;
-	float: left;
-}
-.profile{
-	display: inline-block;
-	float: right;
-	width: 160px;
-}
-.pro-img{
-    border-radius: 5px;
-	float: left;
-	width: 40px;
-	margin-top: 5px;
-}
 .discord-img{
     position: relative;
     border-radius: 5px;
 	width: 40px;
 	top: 5px;
 	left: -13px;
-}
-.profile p{
-	color: white;
-	font-weight: 500;
-	margin-left: 55px;
-	margin-top: 10px;
-	font-size: 13.5px;
-}
-.profile p span{
-	font-weight: 400;
-    font-size: 12px;
-    display: block;
-    color: #8e8b8b;
-}
-.col-div-3{
-	width: 25%;
-	float: left;
 }
 .box{
 	width: 85%;
@@ -116,19 +44,8 @@ body{
 	font-weight: 400;
 	color: #818181;
 }
-.box-icon{
-	font-size: 40px!important;
-    float: right;
-    margin-top: 35px!important;
-    color: #818181;
-    padding-right: 10px;
-}
 .col-div-8{
 	width: 70%;
-	float: left;
-}
-.col-div-4{
-	width: 30%;
 	float: left;
 }
 .content-box{
@@ -145,14 +62,11 @@ body{
     padding: 3px 10px;
     font-size: 15px;
 }
-.box-8, .box-4{
+.box-8{
 	width: 95%;
-	background-color: #272c4a;
+	background-color: #31363A;
 	height: 330px;
 
-}
-.nav2{
-	display: none;
 }
 
 .box-8{
