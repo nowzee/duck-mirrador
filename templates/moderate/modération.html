@@ -1,7 +1,11 @@
 <!Doctype HTML>
-<html>
+<html lang="fr">
 <head>
 	<title>Duck-mirrador</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/moderate.css') }}" type="text/css"/>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
@@ -13,10 +17,11 @@
 	<p class="logo"><span>Duck-</span>mirrador</p>
   <a href="{{ url_for('dashboard') }}" class="icon-a"><i class="fa fa-dashboard icons"></i> &nbsp;&nbsp;Dashboard</a>
   <a href="{{ url_for('administration') }}"class="icon-a"><i class="fa fa-users icons"></i> &nbsp;&nbsp;Administration</a>
-  <a href="#"class="icon-a"><i class="fa fa-shield icons"></i> &nbsp;&nbsp;Modération</a>
+  <a href="{{ url_for('moderation') }}"class="icon-a"><i class="fa fa-shield icons"></i> &nbsp;&nbsp;Modération</a>
   <a href="#"class="icon-a"><i class="fa fa-tasks icons"></i> &nbsp;&nbsp;Serveur</a>
   <a href="{{ url_for('info_account') }}"class="icon-a"><i class="fa fa-user icons"></i> &nbsp;&nbsp;Accounts</a>
-  <a href="#"class="icon-a"><i class="fa fa-list-alt icons"></i> &nbsp;&nbsp;Events</a>
+  <a href="#"class="icon-a"><i class="fa fa-list-alt icons"></i> &nbsp;&nbsp;Ticket Manager</a>
+  <a href="#"class="icon-a"><i class="fa fa-list-alt icons"></i> &nbsp;&nbsp;Invite Manager</a>
 
 </div>
 <div id="main">
@@ -97,12 +102,10 @@
                         <option value="disable">Désactiver</option>
                     </select>
 			</div>
-            <input type="submit" value="Save setting" class="disconnect">
     </div>
 
 		</div>
 	</div>
-    </form>
     <div class="col-div-8">
 		<div class="box-8">
 		<div class="content-box">
@@ -126,14 +129,33 @@
             <p class="uti">l'utilisateur</p>
             <h1><p class="anti">Anti-Raids</p></h1>
             <p style="position: relative; top: 120px;">Coming soon...</p>
+            <h1><p class="log">Logchannel</p></h1>
+            <div class="logchannel">
+                    <select name="logchannel">
+                        <option value="{{ channel_ids }}" selected>{{ channel_id_name }}</option>
+                        {% for channel in channelss %}
+                        <option value="{{ channel['id_channel'] }}">{{ channel['name_channel'] }}</option>
+                        {% endfor %}
+                    </select>
+			</div>
+            <h1><p class="xplog">xpchannel</p></h1>
+            <input type="submit" value="Save setting" class="disconnect">
+            <div class="xplogchannel">
+                    <select name="xplogchannel">
+                        <option value="{{ xp_ids }}" selected>{{ xp_id_name }}</option>
+                        {% for channel in channelss %}
+                        <option value="{{ channel['id_channel'] }}">{{ channel['name_channel'] }}</option>
+                        {% endfor %}
+                    </select>
+            </div>
 
     </div>
 		</div>
 	</div>
+    </form>
 	</div>
 
 	<div class="clearfix"></div>
-</div>
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
