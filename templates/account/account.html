@@ -2,6 +2,9 @@
 <html>
 <head>
 	<title>Duck-mirrador</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/account.css') }}" type="text/css"/>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
@@ -12,11 +15,12 @@
 	<div id="mySidenav" class="sidenav">
 	<p class="logo"><span>Duck-</span>mirrador</p>
   <a href="{{ url_for('dashboard') }}" class="icon-a"><i class="fa fa-dashboard icons"></i> &nbsp;&nbsp;Dashboard</a>
-  <a href="{{ url_for('administration') }}" class="icon-a"><i class="fa fa-users icons"></i> &nbsp;&nbsp;Administration</a>
-  <a href="{{ url_for('moderation') }}" class="icon-a"><i class="fa fa-shield icons"></i> &nbsp;&nbsp;Modération</a>
+  <a href="{{ url_for('administration') }}"class="icon-a"><i class="fa fa-users icons"></i> &nbsp;&nbsp;Administration</a>
+  <a href="{{ url_for('moderation') }}"class="icon-a"><i class="fa fa-shield icons"></i> &nbsp;&nbsp;Modération</a>
   <a href="#"class="icon-a"><i class="fa fa-tasks icons"></i> &nbsp;&nbsp;Serveur</a>
-  <a href="{{ url_for('info_account') }}" class="icon-a"><i class="fa fa-user icons"></i> &nbsp;&nbsp;Accounts</a>
-  <a href="#" class="icon-a"><i class="fa fa-list-alt icons"></i> &nbsp;&nbsp;Events</a>
+  <a href="{{ url_for('info_account') }}"class="icon-a"><i class="fa fa-user icons"></i> &nbsp;&nbsp;Accounts</a>
+  <a href="#"class="icon-a"><i class="fa fa-list-alt icons"></i> &nbsp;&nbsp;Ticket Manager</a>
+  <a href="#"class="icon-a"><i class="fa fa-list-alt icons"></i> &nbsp;&nbsp;Invite Manager</a>
 
 </div>
 <div id="main">
@@ -44,7 +48,7 @@
         </div>
 			<div class="xp_fond">
 				<select name="background_xp" id="extension">
-					<option value="{{ value }}" name="Nom 1" disabled selected>{{ fonds }}</option>
+					<option value="{{ value }}" name="Nom 1"  selected>{{ fonds }}</option>
 					<option value="bg.png">Foret verte</option>
 					<option value="bg2.png">Foret grise</option>
 					<option value="bg3.jpg">ciel étoilé</option>
