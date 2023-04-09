@@ -185,6 +185,8 @@ def dashboard():
             server_list = session["serveur_lis"]
             name_server = session["server_name"]
             icon_server = session["server_icon"]
+            if "None.png" in avatars_image:
+                avatars_image = "https://discord.cat/assets/Logo.jpg"
 
             return render_template('index.html', avatars_image=avatars_image, username=f'{username}',
                                    server_list=server_list, member_server=member_server, name_server=name_server,
@@ -207,6 +209,8 @@ def dashboard():
                         f'https://discord.com/api/oauth2/authorize?client_id={CLIENT_IDS}&permissions=8&scope=bot')
 
                 server_list = session["serveur_lis"]
+                if "None.png" in avatars_image:
+                    avatars_image = "https://discord.cat/assets/Logo.jpg"
 
                 return render_template('index.html', avatars_image=avatars_image, username=f'{username}',
                                        server_list=server_list, member_server=member_server, name_server=name_server,
@@ -277,12 +281,14 @@ def info_account():
         try:
             buffer = settings_xp_card(bot, id, id_serveur, avatars_image, username, niveau, experience,
                                       SEUIL_EXPERIENCE_NIVEAU)
-        except NameError:
+        except NameError as e:
+            print(e)
             niveau = 1
             experience = 0
             SEUIL_EXPERIENCE_NIVEAU = 100 * niveau
-            buffer = settings_xp_card(bot, id, id_serveur, avatars_image, username, niveau, experience,
-                                      SEUIL_EXPERIENCE_NIVEAU)
+            buffer = settings_xp_card(bot, id, id_serveur, avatars_image, username, niveau, experience, SEUIL_EXPERIENCE_NIVEAU)
+        if "None.png" in avatars_image:
+            avatars_image = "https://discord.cat/assets/Logo.jpg"
         return render_template('account/account.html', username=username, rank=Rank, identifiant=id,
                                avatars_image=avatars_image, serveur=serveur, buffer=buffer, value=fond, fonds=fonds)
     else:
