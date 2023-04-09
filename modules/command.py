@@ -62,6 +62,9 @@ def count_member(id_serveur, bot):
 
 
 def settings_xp_card(bot, id, id_serveur, avatars_image, username, niveau, experience, SEUIL_EXPERIENCE_NIVEAU):
+    if "None.png" in avatars_image:
+        avatars_image = "https://discord.cat/assets/Logo.jpg"
+
     user_id = id
     guild_id = id_serveur
 
