@@ -457,7 +457,10 @@ def run_discord_bot():
 
 
 def launch_discord_bot():
-    bot.run(token)
+    try:
+        bot.run(token)
+    except discord.errors.LoginFailure:
+        print("\nToken Invalide")
 
 
 discord_thread = threading.Thread(target=launch_discord_bot)
