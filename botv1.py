@@ -238,7 +238,8 @@ def discord_bot(bot, HOSTS, PORTS):
         except FileNotFoundError:
             await ctx.send(
                 'Connect to duck-mirrador with the link : http://192.168.1.140:7777/connexion for set your xp card but your xp data is saved')
-        except Exception:
+        except Exception as e:
+            print(e)
             try:
                 with open(f'database/server/{ctx.guild.id}.json') as file:
                     data = json.load(file)
@@ -248,18 +249,13 @@ def discord_bot(bot, HOSTS, PORTS):
                 username = ctx.author.name
                 id = ctx.author.id
                 avatars_image = ctx.author.avatar
-                niveau = 1
-                experience = 0
                 SEUIL_EXPERIENCE_NIVEAU = 100 * niveau
-
                 buffer = xp_card(id, avatars_image, username, niveau, experience, SEUIL_EXPERIENCE_NIVEAU)
                 await log.send(file=discord.File(buffer, filename="image.png"))
             except Exception:
                 username = ctx.author.name
                 id = ctx.author.id
                 avatars_image = ctx.author.avatar
-                niveau = 1
-                experience = 0
                 SEUIL_EXPERIENCE_NIVEAU = 100 * niveau
 
                 buffer = xp_card(id, avatars_image, username, niveau, experience, SEUIL_EXPERIENCE_NIVEAU)
