@@ -44,7 +44,7 @@ def discord_authorized():
     API_ENDPOINT = 'https://discord.com/api'
     CLIENT_ID = CLIENT_IDS
     CLIENT_SECRET = CLIENT_SECRETS
-    REDIRECT_URI = f'http://{redirect_url}:7777/discord-authorized'
+    REDIRECT_URI = f'http://{redirect_url}:{PORTS}/discord-authorized'
     discord_api = 'https://discordapp.com/api'
     data = {
         'client_id': CLIENT_ID,
@@ -78,21 +78,24 @@ def discord_authorized():
     user_json1 = user_object1.json()
     user_json2 = user_object2.json()
 
-    print(user_json2)
+    #print(user_json1)
 
     server_list = []
     for i in user_json1:
-        owner = i['owner']
-        if owner == True:
+        if i['permissions'] & 0x8 != 0:
             name_server = i['name']
             id_server = i['id']
             icon_server = i['icon']
             icon_image = f'https://cdn.discordapp.com/icons/{id_server}/{icon_server}.webp?size=96'
-            session['rank'] = 'Administrateur'
-            server_list.append({'nom': name_server, 'id_server': id_server, 'icon': icon_image, 'url': url})
+            if i['owner']:
+                rank = 'Fondateur'
+            else:
+                rank = 'Administrateur'
+            server_list.append({'nom': name_server, 'id_server': id_server, 'icon': icon_image, 'url': url, 'rank': rank})
 
     session["serveur_lis"] = server_list
     print(user_json)
+    print(user_json.get("phone"))
 
     username = user_json.get("username")
     tag = user_json.get("discriminator")
@@ -146,7 +149,7 @@ def connexion():
 @app.route("/discordss", methods=["GET"])
 def discordss():
     return redirect(
-        f'https://discord.com/api/oauth2/authorize?client_id={CLIENT_IDS}&redirect_uri=http%3A%2F%2F{redirect_url}%3A7777%2Fdiscord-authorized&response_type=code&scope=identify%20guilds%20email%20connections')
+        f'https://discord.com/api/oauth2/authorize?client_id={CLIENT_IDS}&redirect_uri=http%3A%2F%2F{redirect_url}%3A{PORTS}%2Fdiscord-authorized&response_type=code&scope=identify%20guilds%20email%20connections')
 
 
 @app.route("/administration", methods=["POST", "GET"])
@@ -230,7 +233,11 @@ def info_account():
         avatars_image = session['avatar']
         id_serveur = session["idserver"]
         serveur = session["server_name"]
-        Rank = session['rank']
+        server_list = session["serveur_lis"]
+
+        for server in server_list:
+            if server['nom'] == serveur:
+                Rank = server['rank']
 
         with open(f"database/user/{id}.json", "r") as file:
             data = json.load(file)
@@ -410,6 +417,12 @@ def moderation():
 @app.route("/select_server", methods=["GET"])
 def select_serveur():
     server_list = session["serveur_lis"]
+    for payloads in server_list:
+        r = payloads["icon"]
+        if "None.webp" in r:
+            icon = "https://discord.cat/assets/Logo.jpg"
+
+    print(server_list)
     return render_template('select_server.html', server_list=server_list)
 
 
