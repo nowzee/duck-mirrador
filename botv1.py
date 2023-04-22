@@ -1,7 +1,9 @@
 import os
+
 from colorama import Fore, Style
 from modules.command import *
 from modules.moderate import *
+from discord import app_commands
 import time
 import sqlite3
 
@@ -237,7 +239,7 @@ def discord_bot(bot, HOSTS, PORTS):
             asyncio.run_coroutine_threadsafe(log.send(file=discord.File(buffer, filename="image.png")), bot.loop)
         except FileNotFoundError:
             await ctx.send(
-                'Connect to duck-mirrador with the link : http://192.168.1.140:7777/connexion for set your xp card but your xp data is saved')
+                f'Connect to duck-mirrador with the link : http://{HOSTS}:{PORTS}/connexion for set your xp card but your xp data is saved')
         except Exception as e:
             print(e)
             try:
@@ -261,59 +263,37 @@ def discord_bot(bot, HOSTS, PORTS):
                 buffer = xp_card(id, avatars_image, username, niveau, experience, SEUIL_EXPERIENCE_NIVEAU)
                 await ctx.send(file=discord.File(buffer, filename="image.png"))
 
-    @bot.command(name='info')
-    async def user_info(ctx, user_id):
+    @bot.tree.command(name='info')
+    @app_commands.describe(member='Enter member')
+    async def user_info(interaction: discord.Interaction, member:discord.Member=None):
         try:
-            user = await bot.fetch_user(user_id)
-            member = ctx.guild.get_member(user.id)
 
-            embed = discord.Embed(title=f"User Info - {user}", color=0x13EB8A)
-            embed.add_field(name="Création du compte", value=user.created_at.strftime("Le %Y-%m-%d %H:%M:%S"))
+            embed = discord.Embed(title=f"User Info - {member.name}", color=0x13EB8A)
+            embed.add_field(name="Création du compte", value=member.created_at.strftime("Le %Y-%m-%d %H:%M:%S"))
             embed.add_field(name="Membre de ce serveur", value=member.joined_at.strftime("Depuis %Y-%m-%d %H:%M:%S"))
-            embed.set_footer(text=f'ID : {user.id}')
-            embed.set_thumbnail(url=user.avatar)
+            embed.set_footer(text=f'ID : {member.id}')
+            embed.set_thumbnail(url=member.avatar)
 
-            await ctx.send(embed=embed)
-
-        except Exception:
-            await ctx.send("User not found.")
-
-    @bot.command(name='info-account')
-    async def user_info(ctx, user_id):
-        try:
-            user = await bot.fetch_user(user_id)
-
-            embed = discord.Embed(title=f"User Info - {user}", description=f"ID: {user.id}", color=0x13EB8A)
-            embed.add_field(name="Création du compte", value=user.created_at.strftime("%Y-%m-%d %H:%M:%S"))
-            embed.set_thumbnail(url=user.avatar)
-
-            await ctx.send(embed=embed)
+            await interaction.response.send_message(embed=embed)
 
         except Exception:
-            await ctx.send("User not found.")
+            await interaction.response.send_message("User not found.")
 
-    @bot.command()
-    async def dashboard(ctx):
-        await ctx.author.send(f"http://{HOSTS}:{PORTS}/dashboard")
+    @bot.tree.command(name='dashboard')
+    async def dashboard(interaction: discord.Interaction):
+        await interaction.response.send_message(f"http://{HOSTS}:{PORTS}/dashboard")
 
-    @bot.command()
-    async def duck(ctx):
-        perm = ctx.author.guild_permissions
-        if perm.administrator:
-            help = discord.Embed(color=discord.Colour.dark_gold(), title="Help",
-                                 description="Commande administrateur et utilisateur")
-            await ctx.send(embed=help)
-        else:
-            help = discord.Embed(color=discord.Colour.dark_gold(), title="Help",
-                                 description="Commande utilisateur")
-            help.add_field(name="rank",
-                           value=f"!rank",
-                           inline=True)
-            help.add_field(name="Compte détail",
-                           value="!info + id pour le serveur"
-                                 "\n!info-account + id", inline=True)
-            help.add_field(name="Dasboard",
-                           value="!dashboard\n"
-                                 "Go to your dashboard", inline=True)
-            help.set_thumbnail(url=bot.user.avatar)
-            await ctx.send(embed=help)
+    @bot.tree.command(name='duck')
+    async def duck(interaction: discord.Interaction):
+        help = discord.Embed(color=discord.Colour.dark_gold(), title="Help",
+                             description="Commande utilisateur")
+        help.add_field(name="rank",
+                       value=f"!rank",
+                       inline=True)
+        help.add_field(name="Compte détail",
+                       value="\n/info+ @member", inline=True)
+        help.add_field(name="Dasboard",
+                       value="/dashboard\n"
+                             "Go to your dashboard", inline=True)
+        help.set_thumbnail(url=bot.user.avatar)
+        await interaction.response.send_message(embed=help, ephemeral=True)
